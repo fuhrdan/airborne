@@ -140,47 +140,12 @@ def draw_helicopters():
         pygame.draw.rect(screen, BLUE, (helicopter['x'], helicopter['y'], 40, 20))
 
 def update_stick_figures():
-    for figure in stick_figures[:]:
+    for figure in stick_figures:
         if figure['falling']:
-            figure['y'] += 2  # Falling down
+            figure['y'] += 2
         if figure['y'] >= GROUND_LEVEL:
             figure['falling'] = False
             figure['y'] = GROUND_LEVEL
-            figure['hopping'] = True  # Enable hopping after landing
-            figure['hop_timer'] = random.randint(30, 100)  # Randomize hop intervals
-        else:
-            figure['hopping'] = False  # If still falling, no hopping
-
-        # Move left
-        figure['x'] -= 1
-        
-        # Hop logic
-        if figure.get('hopping', False):
-            figure['hop_timer'] -= 1
-            if figure['hop_timer'] <= 0:
-                figure['y'] -= 10  # Hop
-                figure['hop_timer'] = random.randint(30, 100)  # Reset hop timer
-
-def check_game_over():
-    """Check if any stick figure has reached the left edge."""
-    for figure in stick_figures:
-        if figure['x'] <= 0:
-            return True
-    return False
-
-def game_over_screen():
-    """Display Game Over message and wait for user input."""
-    screen.fill(WHITE)
-    game_over_text = font.render("Game Over! Press any key to exit.", True, RED)
-    screen.blit(game_over_text, (WIDTH // 2 - 150, HEIGHT // 2))
-    pygame.display.update()
-
-    # Wait for user to close or press a key
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT or event.type == pygame.KEYDOWN:
-                pygame.quit()
-                sys.exit()
 
 def draw_turret():
     screen.blit(turret_img, (turret_x, turret_y))
@@ -239,10 +204,6 @@ def main():
         update_helicopters()
         update_explosions()
         update_stick_figures()
-
-        if check_game_over():
-            game_over_screen()
-
         draw_turret()
         draw_bullets()
         draw_hud()
